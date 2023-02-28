@@ -143,6 +143,9 @@
                                 {% if invoice.order_no %}
                                     Číslo objednávky: {{ invoice.order_no }}
                                 {% endif %}
+                                {% if invoice.dates %}
+                                    Období: {{ invoice.dates }}
+                                {% endif %}
 
                             </td>
 
