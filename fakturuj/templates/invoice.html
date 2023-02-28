@@ -63,15 +63,25 @@
         border-bottom:1px solid #eee;
     }
 
-    .invoice-box table tr.item.last td{
+    .invoice-box table tr.item.nobottom td{
         border-bottom:none;
+    }
+
+    .invoice-box table tr.item.details td{
+        padding-top: 0;
+        padding-bottom: 5px;
     }
 
     .invoice-box table tr.total td {
         border-top:2px solid #eee;
         font-weight:bold;
     }
-
+    .invoice-box table ul {
+        list-style-type: square;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+    }
     @media only screen and (max-width: 600px) {
         .invoice-box table tr.top table td{
             width:100%;
@@ -202,7 +212,7 @@
             </tr>
 
             {% for item in invoice.item_list %}
-                <tr class="item {% if loop.last %}last{% endif %}">
+                <tr class="item {% if loop.last or item.details %}nobottom{% endif %}">
                     <td>
                         {{ item.title }}
                     </td>
@@ -218,9 +228,27 @@
                     {% endif %}
 
                     <td>
-                        {{ space_number(item.cost * item.amount) }}
+                        {{ space_number(item.cost * item.amount) }} {{ currency }}
                     </td>
                 </tr>
+                {% if item.details %}
+                <tr class="item details {% if loop.last %}nobottom{% endif %}">
+                  <td>
+                    <ul>
+                      {% for blurb in item.details %}
+                      <li>
+                        {{ blurb }}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </td>
+                  {% if invoice.show_amounts %}
+                  <td></td>
+                  <td></td>
+                  {% endif %}
+                  <td></td>
+                </tr>
+                {% endif %}
             {% endfor %}
 
             <tr class="total">

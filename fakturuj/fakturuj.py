@@ -29,7 +29,7 @@ def ask_stupid_questions():
     ico = input('ICO, pyco. ')
     personal_info = {
         'account': input('Cislo uctu: '),
-        'ares': call_ares(ico)
+        'personal_data': call_ares(ico)
     }
 
     print('Diky, pyco.')
@@ -103,7 +103,7 @@ def main():
               'souboru. Super co?')
 
         if input("Chces ho vytahnout z ARESu? Ano/Ne") in ('Ano', 'ANO', 'A', 'a'):
-            with open(args.info_file, 'w') as file:
+            with open(args.info_file, 'w', encoding='utf8') as file:
                 info = ask_stupid_questions()
                 file.write(json.dumps(info, indent=4))
         else:
@@ -112,15 +112,14 @@ def main():
         info = load_data(args.info_file)
 
     if not args.output:
-        output_file = os.path.splitext(args.json_file)[0] + '.pdf'
+        output_file = os.path.splitext(args.json_file)[0] + '.html'
     else:
         output_file = args.output
 
     invoice_data = clean_invoice_data(load_data(args.json_file))
     html_content = render_template(invoice_data, info, filename=args.template)
 
-    output_filename = args.json_file.replace(".json", ".html")
-    with open(output_filename, "w", encoding="utf8") as output:
+    with open(output_file, "w", encoding="utf8") as output:
         output.write(html_content)
 
 
