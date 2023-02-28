@@ -23,7 +23,7 @@
     .invoice-box table{
         width:100%;
         line-height:inherit;
-        text-align:left;
+        text-align:right;
     }
 
     .invoice-box table td{
@@ -31,8 +31,8 @@
         vertical-align:top;
     }
 
-    .invoice-box table tr td:nth-child(2){
-        text-align:right;
+    .invoice-box table tr td:nth-child(1){
+        text-align:left;
     }
 
     .invoice-box table tr.top table td{
@@ -49,7 +49,7 @@
         padding-bottom:40px;
     }
 
-    .invoice-box table tr.heading td{
+    .invoice-box table tr.heading td {
         background:#eee;
         border-bottom:1px solid #ddd;
         font-weight:bold;
@@ -67,7 +67,7 @@
         border-bottom:none;
     }
 
-    .invoice-box table tr.total td:nth-child(2){
+    .invoice-box table tr.total td {
         border-top:2px solid #eee;
         font-weight:bold;
     }
@@ -178,10 +178,23 @@
                 </td>
             </tr>
 
+        </table>
+        <table>
+
             <tr class="heading">
                 <td>
                     Položka
                 </td>
+
+                {% if invoice.show_amounts %}
+                <td>
+                    Počet
+                </td>
+
+                <td>
+                    Cena za kus
+                </td>
+                {% endif %}
 
                 <td>
                     Cena
@@ -194,6 +207,16 @@
                         {{ item.title }}
                     </td>
 
+                    {% if invoice.show_amounts %}
+                    <td>
+                      {{ item.amount }}
+                    </td>
+
+                    <td>
+                      {{ space_number(item.cost) }} {{ currency }}
+                    </td>
+                    {% endif %}
+
                     <td>
                         {{ space_number(item.cost * item.amount) }}
                     </td>
@@ -201,7 +224,13 @@
             {% endfor %}
 
             <tr class="total">
+                <td>
+                    Celkem
+                </td>
+                {% if invoice.show_amounts %}
                 <td></td>
+                <td></td>
+                {% endif %}
 
                 <td>
                    {{ space_number(sum_total) }} {{ currency }}

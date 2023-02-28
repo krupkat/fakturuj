@@ -33,7 +33,6 @@ setup(
         'ares_util',
         'python-dateutil',
         'jinja2',
-        'pdfkit',
     ],
     entry_points={
         'console_scripts': [

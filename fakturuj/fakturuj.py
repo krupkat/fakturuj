@@ -3,7 +3,6 @@
 import argparse
 import json
 import os
-import pdfkit
 
 from datetime import timedelta, datetime
 from ares_util.ares import call_ares
@@ -18,7 +17,7 @@ def fuckem(line):
 
 def load_data(filename):
     try:
-        with open(filename) as f:
+        with open(filename, encoding="utf8") as f:
             return json.loads(f.read())
     except json.JSONDecodeError:
         fuckem('Ses posral ne? To neni JSON! '
@@ -118,9 +117,11 @@ def main():
         output_file = args.output
 
     invoice_data = clean_invoice_data(load_data(args.json_file))
-
     html_content = render_template(invoice_data, info, filename=args.template)
-    pdfkit.from_string(html_content, output_path=output_file)
+
+    output_filename = args.json_file.replace(".json", ".html")
+    with open(output_filename, "w", encoding="utf8") as output:
+        output.write(html_content)
 
 
 if __name__ == '__main__':
